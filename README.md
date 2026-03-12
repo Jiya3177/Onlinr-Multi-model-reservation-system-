@@ -1,20 +1,3 @@
-## Screenshots
-
-### Home Page
-![Home](screenshots/home.png)
-
-### Search Results
-![Search](screenshots/search.png)
-
-### Booking Page
-![Booking](screenshots/booking.png)
-
-### Payment Page
-![Payment](screenshots/payment.png)
-
-
-
-
 # Online Reservation System (ORS)
 
 Full-stack Software Engineering project demo for combined Flight, Train, Bus, and Hotel booking.
