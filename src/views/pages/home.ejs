@@ -1,0 +1,139 @@
+<%- include('../partials/header') %>
+
+<section class="container hero-v3">
+  <div class="hero-copy card-glass reveal">
+    <p class="eyebrow">Premium Multi-Modal Booking Experience</p>
+    <h1>Discover travel that feels smooth, smart, and beautifully designed.</h1>
+    <p class="subtext">Search Flights, Trains, Buses, and Hotels from one modern interface with animated interactions and real-time availability flow.</p>
+
+    <div class="hero-points">
+      <span>2000+ concurrent users</span>
+      <span>Fast results in under 3 seconds</span>
+      <span>Secure booking lifecycle</span>
+    </div>
+
+    <div class="hero-rail">
+      <div class="rail-track"></div>
+      <div class="rail-item rail-plane">✈</div>
+      <div class="rail-item rail-train">🚆</div>
+      <div class="rail-item rail-bus">🚌</div>
+    </div>
+
+    <div class="showcase-stack" data-hero-slider>
+      <article class="hero-slide active">
+        <h4>Instant Smart Match</h4>
+        <p>Route, price, class, and rating are balanced automatically for faster booking decisions.</p>
+      </article>
+      <article class="hero-slide">
+        <h4>Visual Seat Intelligence</h4>
+        <p>Pick exact seats and rooms from live 2D maps with window and reserved indicators.</p>
+      </article>
+      <article class="hero-slide">
+        <h4>One Platform, Every Mode</h4>
+        <p>Flight, Train, Bus, and Hotel booking flow is unified with premium checkout and dashboard control.</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="search-shell card-glass reveal">
+    <div class="booking-tabs" data-search-tabs>
+      <button type="button" class="tab-btn active" data-type="flight"><span>✈</span> Flight</button>
+      <button type="button" class="tab-btn" data-type="train"><span>🚆</span> Train</button>
+      <button type="button" class="tab-btn" data-type="bus"><span>🚌</span> Bus</button>
+      <button type="button" class="tab-btn" data-type="hotel"><span>🏨</span> Hotel</button>
+    </div>
+
+    <p class="hint-line" id="searchHint">Search direct options first, then smart fallback suggestions automatically.</p>
+
+    <form action="/search" method="POST" id="searchForm" class="search-form-modern" novalidate>
+      <input type="hidden" name="type" id="searchType" value="flight" />
+
+      <div class="input-grid">
+        <label id="sourceLabel">From
+          <input id="sourceInput" name="source" class="city-input" list="cityList" placeholder="Source city" required />
+        </label>
+
+        <label id="destinationLabel">To
+          <input id="destinationInput" name="destination" class="city-input" list="cityList" placeholder="Destination city" required />
+        </label>
+
+        <label id="dateLabel">Date
+          <input id="dateInput" type="date" name="date" required />
+        </label>
+
+        <label>Price Limit
+          <input type="number" name="maxPrice" value="10000" min="100" required />
+        </label>
+
+        <label id="classTypeLabel">Class / Room Type
+          <input name="classType" placeholder="Economy / Sleeper / Deluxe" />
+        </label>
+
+        <label id="peopleLabel">Passengers / Guests
+          <input type="number" name="people" min="1" value="1" required />
+        </label>
+
+        <label>Min Rating
+          <input type="number" name="minRating" min="0" max="5" step="0.1" value="0" />
+        </label>
+      </div>
+
+      <datalist id="cityList">
+        <% cities.forEach(city => { %>
+          <option value="<%= city.city_name %>"></option>
+        <% }) %>
+      </datalist>
+
+      <button class="btn btn-full" id="searchSubmitBtn" type="submit">Find Best Deals</button>
+    </form>
+  </div>
+</section>
+
+<section class="container metric-strip reveal-group">
+  <article class="metric-tile reveal"><h4>35K+</h4><p>Bookings Processed</p></article>
+  <article class="metric-tile reveal"><h4>120+</h4><p>Connected Routes</p></article>
+  <article class="metric-tile reveal"><h4>4.7/5</h4><p>User Experience Rating</p></article>
+  <article class="metric-tile reveal"><h4>24x7</h4><p>Booking Availability</p></article>
+</section>
+
+<section class="container feature-strip reveal-group">
+  <article class="card-glass feature-tile reveal">
+    <h3>Smart Price Compare</h3>
+    <p>Ranked options by timing, budget, class, and rating with fallback intelligence.</p>
+  </article>
+  <article class="card-glass feature-tile reveal">
+    <h3>Visual Seat/Room Map</h3>
+    <p>Choose exact seats or rooms from real-time 2D map with color-coded states.</p>
+  </article>
+  <article class="card-glass feature-tile reveal">
+    <h3>Smooth Checkout</h3>
+    <p>Card, UPI, and Net Banking flow with transaction-safe booking confirmation.</p>
+  </article>
+  <article class="card-glass feature-tile reveal">
+    <h3>Manage & Refund</h3>
+    <p>Cancel booking, auto-refund handling, and downloadable ticket receipt.</p>
+  </article>
+</section>
+
+<section class="container offer-zone reveal-group">
+  <div class="section-head reveal">
+    <div>
+      <p class="eyebrow">Current Offers</p>
+      <h2>Promo Codes</h2>
+    </div>
+  </div>
+  <div class="offer-grid">
+    <% offers.forEach(offer => { %>
+      <article class="card-glass offer-card reveal">
+        <div class="offer-top">
+          <h3><%= offer.offer_code %></h3>
+          <span class="pill-badge"><%= offer.discount_percent %>% OFF</span>
+        </div>
+        <p><%= offer.description %></p>
+        <small>Valid till: <%= offer.valid_until %></small>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

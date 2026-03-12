@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Inventory Management</p>
+      <h1>Manage <%= config.title %></h1>
+    </div>
+  </div>
+
+  <form class="card-glass form-wide" action="/admin/manage/<%= type %>/add" method="POST" novalidate>
+    <h3>Add New <%= type %></h3>
+    <div class="input-grid">
+      <% if (type === 'hotel') { %>
+        <label>Hotel Name<input name="hotel_name" required /></label>
+        <label>City
+          <select name="city_id" required>
+            <% cities.forEach(c => { %><option value="<%= c.city_id %>"><%= c.city_name %></option><% }) %>
+          </select>
+        </label>
+        <label>Room Type<input name="room_type" required /></label>
+        <label>Amenities<input name="amenities" required /></label>
+        <label>Price Per Night<input type="number" name="price_per_night" required /></label>
+        <label>Total Rooms<input type="number" name="total_rooms" required /></label>
+        <label>Available Rooms<input type="number" name="available_rooms" required /></label>
+        <label>Rating<input type="number" name="rating" min="1" max="5" step="0.1" value="4" /></label>
+      <% } else { %>
+        <label>Code<input name="code" required /></label>
+        <label>Operator Name<input name="operator_name" required /></label>
+        <label>Source City
+          <select name="source_city_id" required>
+            <% cities.forEach(c => { %><option value="<%= c.city_id %>"><%= c.city_name %></option><% }) %>
+          </select>
+        </label>
+        <label>Destination City
+          <select name="destination_city_id" required>
+            <% cities.forEach(c => { %><option value="<%= c.city_id %>"><%= c.city_name %></option><% }) %>
+          </select>
+        </label>
+        <label>Travel Date<input type="date" name="travel_date" required /></label>
+        <label>Departure Time<input type="time" name="depart_time" required /></label>
+        <label>Arrival Time<input type="time" name="arrive_time" required /></label>
+        <label>Class Type<input name="class_type" required /></label>
+        <label>Price<input type="number" name="price" required /></label>
+        <label>Total Seats<input type="number" name="total_seats" required /></label>
+        <label>Available Seats<input type="number" name="available_seats" required /></label>
+        <label>Rating<input type="number" name="rating" min="1" max="5" step="0.1" value="4" /></label>
+      <% } %>
+    </div>
+    <button class="btn" type="submit">Add Record</button>
+  </form>
+
+  <article class="card-glass">
+    <h3>Existing Records</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <% if (items.length) { %>
+              <% Object.keys(items[0]).forEach(key => { %><th><%= key %></th><% }) %>
+            <% } %>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(row => { %>
+            <tr>
+              <% Object.values(row).forEach(val => { %><td><%= val %></td><% }) %>
+              <td>
+                <a href="/admin/manage/<%= type %>/edit/<%= row[config.id] %>">Edit</a>
+                <form class="inline-form" action="/admin/manage/<%= type %>/delete/<%= row[config.id] %>" method="POST">
+                  <button type="submit" class="text-link danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+
+<%- include('../partials/footer') %>

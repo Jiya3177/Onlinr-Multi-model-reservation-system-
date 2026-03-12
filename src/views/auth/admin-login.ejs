@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+
+<section class="container auth-shell">
+  <article class="auth-side card-glass reveal">
+    <p class="eyebrow">Admin Access</p>
+    <h1>Control routes, schedules, rooms, and pricing.</h1>
+    <p class="subtext">Sign in to operations dashboard and booking analytics panel.</p>
+  </article>
+
+  <form class="auth-form card-glass reveal" action="/auth/admin/login" method="POST" novalidate>
+    <h2>Admin Login</h2>
+    <% if (error) { %><p class="field-error"><%= error %></p><% } %>
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
+    <label>Password
+      <input type="password" name="password" required />
+    </label>
+    <button class="btn btn-full" type="submit">Login as Admin</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

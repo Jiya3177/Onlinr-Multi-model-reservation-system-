@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+
+<section class="container auth-shell">
+  <article class="auth-side card-glass reveal">
+    <p class="eyebrow">Payment Gateway</p>
+    <h1>Complete your reservation securely.</h1>
+    <p class="subtext">Reservation ID: <strong><%= booking.reservation_id %></strong></p>
+    <p class="subtext">Total Payable: <strong>INR <%= booking.total_price %></strong></p>
+    <% if (booking.passenger_gender) { %>
+      <p class="subtext">Passenger Gender: <strong><%= booking.passenger_gender %></strong></p>
+    <% } %>
+
+    <% if (bookingSeats && bookingSeats.length) { %>
+      <p class="subtext"><strong><%= booking.booking_type === 'hotel' ? 'Rooms:' : 'Seats:' %></strong>
+      <%= bookingSeats.map(s => s.seat_label + (s.is_lady_reserved ? ' (Lady)' : '')).join(', ') %></p>
+    <% } %>
+  </article>
+
+  <form class="auth-form card-glass reveal" action="/booking/payment/<%= booking.booking_id %>" method="POST" novalidate>
+    <h2>Payment Details</h2>
+    <label>Payment Method
+      <select name="method" required>
+        <option value="CARD">Card</option>
+        <option value="UPI">UPI</option>
+        <option value="NET_BANKING">Net Banking</option>
+      </select>
+    </label>
+
+    <label>Card / UPI Reference
+      <input name="dummy_ref" placeholder="XXXX-XXXX / user@upi" required />
+    </label>
+
+    <button class="btn btn-full" type="submit">Pay & Confirm</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

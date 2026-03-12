@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <article class="card-glass confirm-card reveal">
+    <div class="success-anim" aria-hidden="true">
+      <span></span>
+      <i>✓</i>
+    </div>
+    <h1>Booking Confirmed</h1>
+    <p>Your reservation has been completed successfully.</p>
+    <p><strong>Reservation ID:</strong> <%= reservationId %></p>
+    <div class="action-row">
+      <a href="/dashboard" class="btn">Open Dashboard</a>
+      <a href="/booking/ticket/<%= bookingId %>" class="btn btn-ghost">Download Ticket</a>
+    </div>
+  </article>
+</section>
+
+<%- include('../partials/footer') %>

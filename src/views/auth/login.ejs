@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+
+<section class="container auth-shell">
+  <article class="auth-side card-glass reveal">
+    <p class="eyebrow">Welcome Back</p>
+    <h1>Login to continue your bookings.</h1>
+    <p class="subtext">Access dashboard, tickets, cancellations, and travel notifications.</p>
+  </article>
+
+  <form class="auth-form card-glass reveal" action="/auth/login" method="POST" novalidate>
+    <h2>User Login</h2>
+    <% if (error) { %><p class="field-error"><%= error %></p><% } %>
+    <label>Email or Phone
+      <input name="emailOrPhone" required />
+    </label>
+    <label>Password
+      <input type="password" name="password" required />
+    </label>
+    <button class="btn btn-full" type="submit">Login</button>
+    <a class="text-link" href="/auth/forgot-password">Forgot Password?</a>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

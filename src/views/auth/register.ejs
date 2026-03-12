@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<section class="container auth-shell">
+  <article class="auth-side card-glass reveal">
+    <p class="eyebrow">Create Account</p>
+    <h1>Join ORS and book every mode in one place.</h1>
+    <p class="subtext">Fast sign-up with secure profile and booking history management.</p>
+  </article>
+
+  <form class="auth-form card-glass reveal" action="/auth/register" method="POST" novalidate>
+    <h2>Register</h2>
+    <% if (error) { %><p class="field-error"><%= error %></p><% } %>
+    <label>Full Name
+      <input name="full_name" required />
+    </label>
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
+    <label>Phone (10 digits)
+      <input name="phone" pattern="\d{10}" required />
+    </label>
+    <label>Password
+      <input type="password" name="password" minlength="6" required />
+    </label>
+    <button class="btn btn-full" type="submit">Create Account</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

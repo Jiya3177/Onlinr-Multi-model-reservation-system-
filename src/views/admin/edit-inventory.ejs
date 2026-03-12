@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Inventory Edit</p>
+      <h1>Edit <%= type %> Record</h1>
+    </div>
+  </div>
+
+  <form class="card-glass form-wide" action="/admin/manage/<%= type %>/edit/<%= item[config.id] %>" method="POST" novalidate>
+    <div class="input-grid">
+      <% if (type === 'hotel') { %>
+        <label>Hotel Name<input name="hotel_name" value="<%= item.hotel_name %>" required /></label>
+        <label>City
+          <select name="city_id" required>
+            <% cities.forEach(c => { %>
+              <option value="<%= c.city_id %>" <%= c.city_id === item.city_id ? 'selected' : '' %>><%= c.city_name %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Room Type<input name="room_type" value="<%= item.room_type %>" required /></label>
+        <label>Amenities<input name="amenities" value="<%= item.amenities %>" required /></label>
+        <label>Price Per Night<input type="number" name="price_per_night" value="<%= item.price_per_night %>" required /></label>
+        <label>Total Rooms<input type="number" name="total_rooms" value="<%= item.total_rooms %>" required /></label>
+        <label>Available Rooms<input type="number" name="available_rooms" value="<%= item.available_rooms %>" required /></label>
+        <label>Rating<input type="number" name="rating" min="1" max="5" step="0.1" value="<%= item.rating %>" required /></label>
+      <% } else { %>
+        <label>Code<input name="code" value="<%= item.code %>" required /></label>
+        <label>Operator Name<input name="operator_name" value="<%= item.operator_name %>" required /></label>
+        <label>Source City
+          <select name="source_city_id" required>
+            <% cities.forEach(c => { %>
+              <option value="<%= c.city_id %>" <%= c.city_id === item.source_city_id ? 'selected' : '' %>><%= c.city_name %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Destination City
+          <select name="destination_city_id" required>
+            <% cities.forEach(c => { %>
+              <option value="<%= c.city_id %>" <%= c.city_id === item.destination_city_id ? 'selected' : '' %>><%= c.city_name %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Travel Date<input type="date" name="travel_date" value="<%= item.travel_date %>" required /></label>
+        <label>Departure Time<input type="time" name="depart_time" value="<%= item.depart_time %>" required /></label>
+        <label>Arrival Time<input type="time" name="arrive_time" value="<%= item.arrive_time %>" required /></label>
+        <label>Class Type<input name="class_type" value="<%= item.class_type %>" required /></label>
+        <label>Price<input type="number" name="price" value="<%= item.price %>" required /></label>
+        <label>Total Seats<input type="number" name="total_seats" value="<%= item.total_seats %>" required /></label>
+        <label>Available Seats<input type="number" name="available_seats" value="<%= item.available_seats %>" required /></label>
+        <label>Rating<input type="number" name="rating" min="1" max="5" step="0.1" value="<%= item.rating %>" required /></label>
+      <% } %>
+    </div>
+
+    <div class="action-row">
+      <button class="btn" type="submit">Update</button>
+      <a class="btn btn-ghost" href="/admin/manage/<%= type %>">Back</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,39 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Admin Dashboard</p>
+      <h1>Operations Control Center</h1>
+      <p class="subtext">Manage inventory, users, bookings, and platform revenue.</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <article class="card-glass stat-card"><h4><%= users.total_users %></h4><p>Users</p></article>
+    <article class="card-glass stat-card"><h4><%= bookings.total_bookings %></h4><p>Bookings</p></article>
+    <article class="card-glass stat-card"><h4>INR <%= revenue.total_revenue %></h4><p>Revenue</p></article>
+    <article class="card-glass stat-card"><h4><%= bookingStats.length %></h4><p>Booking Categories</p></article>
+  </div>
+
+  <article class="card-glass">
+    <h3>Booking Distribution</h3>
+    <div class="tag-row">
+      <% bookingStats.forEach(stat => { %>
+        <span class="pill-badge"><%= stat.booking_type %>: <%= stat.count %></span>
+      <% }) %>
+    </div>
+  </article>
+
+  <div class="action-row wrap">
+    <a class="btn" href="/admin/manage/flight">Manage Flights</a>
+    <a class="btn" href="/admin/manage/train">Manage Trains</a>
+    <a class="btn" href="/admin/manage/bus">Manage Buses</a>
+    <a class="btn" href="/admin/manage/hotel">Manage Hotels</a>
+    <a class="btn" href="/admin/users">Users</a>
+    <a class="btn" href="/admin/bookings">Bookings</a>
+    <a class="btn" href="/admin/payments">Payments</a>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

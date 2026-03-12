@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Admin Bookings</p>
+      <h1>All Booking Records</h1>
+    </div>
+  </div>
+
+  <article class="card-glass">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>User</th><th>Email</th><th>Reservation</th><th>Type</th><th>Date</th><th>Status</th><th>Payment</th><th>Total</th><th>Created</th></tr></thead>
+        <tbody>
+          <% bookings.forEach(b => { %>
+            <tr>
+              <td><%= b.booking_id %></td>
+              <td><%= b.full_name %></td>
+              <td><%= b.email %></td>
+              <td><%= b.reservation_id %></td>
+              <td><%= b.booking_type %></td>
+              <td><%= b.travel_date %></td>
+              <td><%= b.booking_status %></td>
+              <td><%= b.payment_status || 'PENDING' %></td>
+              <td>INR <%= b.total_price %></td>
+              <td><%= b.created_at %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+
+<%- include('../partials/footer') %>

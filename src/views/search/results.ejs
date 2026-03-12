@@ -1,0 +1,91 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Search Results</p>
+      <h1><%= type.toUpperCase() %> Booking Options</h1>
+      <% if (type === 'hotel') { %>
+        <p class="subtext">City: <strong><%= filters.destination || 'N/A' %></strong> | Check-in: <strong><%= filters.date || 'N/A' %></strong></p>
+      <% } else { %>
+        <p class="subtext">Route: <strong><%= filters.source || 'N/A' %></strong> → <strong><%= filters.destination || 'N/A' %></strong> | Date: <strong><%= filters.date || 'N/A' %></strong></p>
+      <% } %>
+    </div>
+    <a href="/" class="btn btn-ghost">Modify Search</a>
+  </div>
+
+  <% if (searchMeta && searchMeta.note) { %>
+    <div class="info-banner"><strong>Mode:</strong> <%= searchMeta.mode %> • <%= searchMeta.note %></div>
+  <% } %>
+
+  <div class="result-layout">
+    <aside class="filter-sidebar card-glass reveal">
+      <h3>Applied Filters</h3>
+      <ul>
+        <li><strong>Type:</strong> <%= type %></li>
+        <li><strong>Budget:</strong> INR <%= filters.maxPrice || 'N/A' %></li>
+        <li><strong>People:</strong> <%= filters.people || '1' %></li>
+        <li><strong>Class/Type:</strong> <%= filters.classType || 'Any' %></li>
+        <li><strong>Rating:</strong> <%= filters.minRating || '0' %>+</li>
+      </ul>
+      <p class="subtext">For best results, keep class filter broad and choose a wider budget.</p>
+    </aside>
+
+    <div class="result-grid-v2">
+      <% if (!results.length) { %>
+        <article class="card-glass empty-state">
+          <h3>No options found</h3>
+          <p>Try another date, higher budget, or broader class filter.</p>
+          <a href="/" class="btn">Back to Search</a>
+        </article>
+      <% } %>
+
+      <% results.forEach(item => { %>
+        <article class="card-glass result-card-v2 reveal">
+          <% if (type === 'hotel') { %>
+            <div class="result-head">
+              <h3><span class="type-icon">🏨</span> <%= item.hotel_name %></h3>
+              <span class="pill-badge">⭐ <%= item.rating %></span>
+            </div>
+            <p class="subtext"><%= item.city_name %> • <%= item.room_type %></p>
+            <p><%= item.amenities %></p>
+            <div class="result-meta">
+              <span><%= item.available_rooms %>/<%= item.total_rooms %> Rooms</span>
+              <span>Instant confirmation</span>
+            </div>
+            <div class="result-foot">
+              <div>
+                <strong class="price-main">INR <%= item.price_per_night %></strong>
+                <small>per night</small>
+              </div>
+              <a class="btn" href="/booking/hotel/<%= item.hotel_id %>?people=<%= filters.people || 1 %>">Reserve</a>
+            </div>
+          <% } else { %>
+            <div class="result-head">
+              <h3>
+                <span class="type-icon"><%= type === 'flight' ? '✈' : type === 'train' ? '🚆' : '🚌' %></span>
+                <%= item.operator_name %>
+              </h3>
+              <span class="pill-badge"><%= item.code %></span>
+            </div>
+            <p><strong><%= item.source_city %></strong> → <strong><%= item.destination_city %></strong></p>
+            <p class="subtext"><%= item.depart_time %> - <%= item.arrive_time %> | <%= item.class_type %> | ⭐ <%= item.rating %></p>
+            <div class="result-meta">
+              <span><%= item.available_seats %>/<%= item.total_seats %> Seats</span>
+              <span><%= item.travel_date %></span>
+            </div>
+            <div class="result-foot">
+              <div>
+                <strong class="price-main">INR <%= item.price %></strong>
+                <small>per seat</small>
+              </div>
+              <a class="btn" href="/booking/<%= type %>/<%= item[type + '_id'] %>?people=<%= filters.people || 1 %>">Select</a>
+            </div>
+          <% } %>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
