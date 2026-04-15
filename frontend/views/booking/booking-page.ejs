@@ -1,0 +1,105 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head section-head-tight">
+    <div>
+      <p class="eyebrow">Reservation Checkout</p>
+      <h1>Review the option and lock your <%= type %> booking</h1>
+      <p class="subtext">Passenger details, seat or room selection, and booking quantity are submitted exactly through the existing reservation flow.</p>
+    </div>
+  </div>
+
+  <div class="booking-layout">
+    <article class="card-glass booking-summary reveal">
+      <p class="summary-kicker">Selected inventory</p>
+      <% if (type === 'hotel') { %>
+        <h3><%= item.hotel_name %></h3>
+        <p><strong>Check-in date:</strong> <%= selectedDate || 'Not selected' %></p>
+        <p><strong>Check-out date:</strong> <%= selectedCheckoutDate || 'Not selected' %></p>
+        <p><strong>Room type:</strong> <%= item.room_type %></p>
+        <p><strong>Availability:</strong> <%= item.available_rooms %> / <%= item.total_rooms %> rooms</p>
+        <p><strong>Nightly rate:</strong> INR <%= item.price_per_night %></p>
+      <% } else { %>
+        <h3><%= item.operator_name %> <span class="muted-inline">(<%= item.code %>)</span></h3>
+        <p><strong>Travel date:</strong> <%= item.travel_date %></p>
+        <p><strong>Departure window:</strong> <%= item.depart_time %> to <%= item.arrive_time %></p>
+        <p><strong>Class:</strong> <%= item.class_type %></p>
+        <p><strong>Availability:</strong> <%= item.available_seats %> / <%= item.total_seats %> seats</p>
+        <p><strong>Fare:</strong> INR <%= item.price %> per seat</p>
+      <% } %>
+
+      <div class="booking-note">
+        <strong>Before payment</strong>
+        <p>Your selection is converted into a pending booking first. Inventory is finalized only after payment confirmation.</p>
+      </div>
+
+      <div class="summary-pill-row">
+        <span class="pill-badge">Inventory locked on selection</span>
+        <span class="pill-badge"><%= type === 'hotel' ? 'Room-first checkout' : 'Seat-first checkout' %></span>
+      </div>
+    </article>
+
+    <form class="card-glass booking-form reveal" action="/booking/create" method="POST" id="bookingForm" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input type="hidden" name="type" value="<%= type %>" />
+      <input type="hidden" name="item_id" value="<%= item[type + '_id'] || item.hotel_id %>" />
+      <% if (type === 'hotel') { %>
+        <input type="hidden" name="check_in_date" value="<%= selectedDate || '' %>" />
+        <input type="hidden" name="check_out_date" value="<%= selectedCheckoutDate || '' %>" />
+      <% } %>
+
+      <h3>Passenger Information</h3>
+      <div class="input-grid compact-grid">
+        <label>Full Name
+          <input name="passenger_name" placeholder="Passenger full name" required />
+        </label>
+        <label>Email
+          <input type="email" name="passenger_email" placeholder="name@example.com" required />
+        </label>
+        <label>Phone
+          <input name="passenger_phone" pattern="\d{10}" placeholder="10 digit number" required />
+        </label>
+
+        <% if (type !== 'hotel') { %>
+          <label>Passenger Gender
+            <select name="passenger_gender" id="passengerGender" required>
+              <option value="">Select gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </label>
+        <% } %>
+      </div>
+
+      <div class="seat-map-shell">
+        <div class="seat-map-head">
+          <h4><%= type === 'hotel' ? 'Select room(s)' : 'Select seat(s)' %></h4>
+          <div class="seat-legend">
+            <span><i class="dot dot-available"></i>Available</span>
+            <% if (type !== 'hotel') { %>
+              <span><i class="dot dot-window"></i>Window</span>
+              <span><i class="dot dot-lady"></i>Ladies reserved</span>
+            <% } %>
+            <span><i class="dot dot-booked"></i>Reserved</span>
+            <span><i class="dot dot-selected"></i>Selected</span>
+          </div>
+        </div>
+
+        <div class="seat-grid-wrap" id="seatLayoutShell" data-type="<%= type %>" data-item-id="<%= item[type + '_id'] || item.hotel_id %>">
+          <div class="seat-grid" id="seatMap"></div>
+        </div>
+        <p class="subtext seat-status-line" id="seatSelectionInfo" aria-live="polite">Loading selection map...</p>
+      </div>
+
+      <input type="hidden" name="seat_labels" id="seatLabelsInput" />
+      <label><%= type === 'hotel' ? 'Selected Rooms Count' : 'Selected Seats Count' %>
+        <input type="number" name="units" id="seatCountInput" min="1" value="0" readonly required />
+      </label>
+
+      <button class="btn btn-full" type="submit">Proceed to Payment</button>
+    </form>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

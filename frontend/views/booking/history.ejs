@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+
+<section class="container page-section">
+  <div class="section-head section-head-tight">
+    <div>
+      <p class="eyebrow">Booking History</p>
+      <h1>All reservation and payment activity</h1>
+      <p class="subtext">Track booking status, payment progress, and open full receipts for any reservation.</p>
+    </div>
+    <div class="wallet-chip">Wallet Balance: INR <%= Number(wallet.balance).toFixed(2) %></div>
+  </div>
+
+  <div class="history-grid">
+    <% if (!bookings.length) { %>
+      <article class="card-glass empty-state">
+        <div class="empty-state-icon" aria-hidden="true">🧾</div>
+        <h3>No bookings yet</h3>
+        <p>Make a reservation to populate your booking history.</p>
+      </article>
+    <% } %>
+
+    <% bookings.forEach((booking) => { %>
+      <article class="card-glass history-card">
+        <div class="history-card-head">
+          <div>
+            <p class="eyebrow">Booking ID</p>
+            <h3><%= booking.reservation_id %></h3>
+          </div>
+          <span class="status-badge <%= booking.booking_status === 'CONFIRMED' ? 'status-confirmed' : booking.booking_status === 'CANCELLED' ? 'status-failed' : 'status-pending' %>">
+            <%= booking.booking_status %>
+          </span>
+        </div>
+        <p><strong><%= booking.route_label %></strong></p>
+        <p class="subtext">
+          <%= booking.booking_type.toUpperCase() %> •
+          <%= booking.travel_date %>
+          <% if (booking.booking_type === 'hotel' && booking.check_out_date) { %>
+            to <%= booking.check_out_date %>
+          <% } %>
+        </p>
+        <div class="history-meta">
+          <span>Amount: INR <%= booking.total_price %></span>
+          <span>Payment: <%= booking.payment_status || booking.transaction_status %></span>
+        </div>
+        <div class="action-row">
+          <a href="/booking/history/<%= booking.booking_id %>" class="btn btn-xs">View Receipt</a>
+          <% if (booking.booking_status === 'CONFIRMED') { %>
+            <a href="/booking/ticket/<%= booking.booking_id %>" class="btn btn-ghost">Ticket</a>
+          <% } %>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="<%= csrfToken %>" />
+  <title>ORS | Multi-Modal Booking Platform</title>
+  <meta name="description" content="Plan and manage flight, train, bus, and hotel reservations from one connected booking platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/main.js"></script>
+</head>
+<body class="page-enter app-shell">
+  <div class="bg-layer"></div>
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a href="/" class="brand-link" aria-label="ORS home">
+        <span class="brand-badge">ORS</span>
+        <span class="brand-meta">
+          <strong>Online Reservation System</strong>
+          <small>Unified bookings for travel and stays</small>
+        </span>
+      </a>
+
+      <nav class="nav-row" aria-label="Primary navigation">
+        <div class="nav-links">
+          <a href="/" class="nav-link <%= currentPath === '/' ? 'is-active' : '' %>">Home</a>
+          <a href="/about" class="nav-link <%= currentPath === '/about' ? 'is-active' : '' %>">About</a>
+          <a href="/contact" class="nav-link <%= currentPath === '/contact' ? 'is-active' : '' %>">Support</a>
+        </div>
+        <% if (currentUser) { %>
+          <div class="nav-links nav-links-auth">
+            <a href="/dashboard" class="nav-link <%= currentPath === '/dashboard' ? 'is-active' : '' %>">My Trips</a>
+            <a href="/booking/history" class="nav-link <%= currentPath === '/booking/history' ? 'is-active' : '' %>">History</a>
+          </div>
+          <form action="/auth/logout" method="POST" class="inline-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="text-link">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/auth/login" class="nav-link <%= currentPath === '/auth/login' ? 'is-active' : '' %>">Login</a>
+          <a href="/auth/register" class="btn btn-xs">Create Account</a>
+        <% } %>
+        <% if (currentAdmin) { %>
+          <a href="/admin" class="pill">Operations</a>
+        <% } else { %>
+          <a href="/auth/admin/login" class="pill">Admin</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <% if (flash) { %>
+    <section class="container toast-row">
+      <div class="toast <%= flash.type === 'error' ? 'toast-error' : 'toast-success' %>" role="status" aria-live="polite"><%= flash.message %></div>
+    </section>
+  <% } %>
+
+  <main class="main-shell">

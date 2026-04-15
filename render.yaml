@@ -1,52 +1,27 @@
 services:
-  - type: pserv
-    name: ors-mysql
-    runtime: docker
-    plan: starter
-    dockerContext: ./render/mysql
-    envVars:
-      - key: MYSQL_DATABASE
-        value: ors_db
-      - key: MYSQL_USER
-        value: ors_user
-      - key: MYSQL_PASSWORD
-        sync: false
-      - key: MYSQL_ROOT_PASSWORD
-        sync: false
-    disk:
-      name: ors-mysql-data
-      mountPath: /var/lib/mysql
-      sizeGB: 10
-
   - type: web
     name: ors-web
     runtime: node
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: npm install --omit=dev
+    startCommand: npm run start:backend
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
+      - key: TRUST_PROXY
+        value: "true"
       - key: SESSION_SECRET
         generateValue: true
-      - key: DB_HOST
-        fromService:
-          name: ors-mysql
-          type: pserv
-          property: host
-      - key: DB_PORT
-        fromService:
-          name: ors-mysql
-          type: pserv
-          property: port
-      - key: DB_NAME
-        value: ors_db
-      - key: DB_USER
-        value: ors_user
-      - key: DB_PASSWORD
+      - key: SESSION_COOKIE_NAME
+        value: ors.sid
+      - key: SESSION_TTL_HOURS
+        value: "8"
+      - key: MONGODB_URI
         sync: false
+      - key: APP_TIMEZONE
+        value: Asia/Kolkata
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT
@@ -67,3 +42,9 @@ services:
         value: q
       - key: FAST2SMS_LANGUAGE
         value: english
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_NAME
+        value: Main Admin

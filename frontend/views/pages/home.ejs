@@ -1,0 +1,205 @@
+<%- include('../partials/header') %>
+
+<section class="container hero-v3">
+  <div class="hero-copy card-glass reveal">
+    <p class="eyebrow">Connected Reservation Platform</p>
+    <h1>Book flights, trains, buses, and hotels through one polished traveler workflow.</h1>
+    <p class="subtext">Compare inventory-backed options, select seats or rooms, complete payment, and manage upcoming trips from a single reservation dashboard.</p>
+
+    <div class="hero-points">
+      <span>Search across 4 booking categories</span>
+      <span>Live seat and room selection</span>
+      <span>Payment-backed confirmation flow</span>
+    </div>
+
+    <div class="hero-rail" aria-hidden="true">
+      <div class="rail-track"></div>
+      <div class="rail-item rail-plane">✈</div>
+      <div class="rail-item rail-train">🚆</div>
+      <div class="rail-item rail-bus">🚌</div>
+    </div>
+
+    <div class="showcase-stack" data-hero-slider>
+      <article class="hero-slide active">
+        <h4>Search with fallback intelligence</h4>
+        <p>Find direct results first, then surface alternative dates, nearby routes, or broader stay options when exact inventory is limited.</p>
+      </article>
+      <article class="hero-slide">
+        <h4>Reserve exact seats and rooms</h4>
+        <p>Use the interactive seat and room map to select available units before payment confirmation.</p>
+      </article>
+      <article class="hero-slide">
+        <h4>Manage trips after checkout</h4>
+        <p>Track reservations, payment status, notifications, and cancellations from the user dashboard.</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="search-shell card-glass reveal">
+    <div class="panel-intro">
+      <p class="eyebrow">Start A Booking</p>
+      <h2>Find the best connected option for your trip</h2>
+      <p class="subtext">Search is backed by live inventory, pricing, and traveler filters so the results page stays aligned with checkout.</p>
+    </div>
+
+    <div class="booking-tabs" data-search-tabs>
+      <button type="button" class="tab-btn active" data-type="flight"><span>✈</span> Flight</button>
+      <button type="button" class="tab-btn" data-type="train"><span>🚆</span> Train</button>
+      <button type="button" class="tab-btn" data-type="bus"><span>🚌</span> Bus</button>
+    </div>
+
+    <p class="hint-line" id="searchHint">Search direct routes first, then closest-date transport alternatives automatically.</p>
+
+    <form action="/search" method="POST" id="searchForm" class="search-form-modern" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input type="hidden" name="type" id="searchType" value="flight" />
+
+      <div class="input-grid">
+        <label id="sourceLabel">From
+          <input id="sourceInput" name="source" class="city-input" list="cityList" placeholder="Source city" required />
+        </label>
+
+        <label id="destinationLabel">To
+          <input id="destinationInput" name="destination" class="city-input" list="cityList" placeholder="Destination city" required />
+        </label>
+
+        <label id="dateLabel">Date
+          <input id="dateInput" type="date" name="date" required />
+        </label>
+
+        <label>Price Limit
+          <input type="number" name="maxPrice" value="10000" min="100" required />
+        </label>
+
+        <label id="classTypeLabel">Class / Room Type
+          <input name="classType" placeholder="Economy, Sleeper, Deluxe" />
+        </label>
+
+        <label id="peopleLabel">Passengers / Guests
+          <input type="number" name="people" min="1" value="1" required />
+        </label>
+
+        <label>Min Rating
+          <input type="number" name="minRating" min="0" max="5" step="0.1" value="0" />
+        </label>
+      </div>
+
+      <datalist id="cityList">
+        <% cities.forEach(city => { %>
+          <option value="<%= city.city_name %>"></option>
+        <% }) %>
+      </datalist>
+
+      <button class="btn btn-full" id="searchSubmitBtn" type="submit">Search Availability</button>
+      <p class="form-caption">Search results and booking links use the same identifiers and payload shape as the backend inventory records.</p>
+    </form>
+  </div>
+</section>
+
+<section class="container section-block reveal-group" id="hotel-booking">
+  <div class="section-head reveal">
+    <div>
+      <p class="eyebrow">Hotel Booking</p>
+      <h2>Book a hotel through a dedicated stay form</h2>
+      <p class="subtext">The hotel flow is separated from transport search so city, stay dates, and room preferences work independently.</p>
+    </div>
+  </div>
+
+  <div class="card-glass reveal">
+    <form action="/search" method="POST" id="hotelSearchForm" class="search-form-modern" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input type="hidden" name="type" value="hotel" />
+
+      <div class="input-grid">
+        <label>City
+          <input id="hotelDestinationInput" name="destination" class="city-input" list="cityList" placeholder="Hotel city" required />
+        </label>
+
+        <label>Check-in Date
+          <input id="hotelCheckinInput" type="date" name="date" required />
+        </label>
+
+        <label>Check-out Date
+          <input id="hotelCheckoutInput" type="date" name="checkOutDate" required />
+        </label>
+
+        <label>Room Type
+          <input name="classType" placeholder="Standard, Deluxe, Suite" />
+        </label>
+
+        <label>Guests
+          <input type="number" name="people" min="1" value="1" required />
+        </label>
+
+        <label>Price Limit
+          <input type="number" name="maxPrice" value="10000" min="100" required />
+        </label>
+
+        <label>Min Rating
+          <input type="number" name="minRating" min="0" max="5" step="0.1" value="0" />
+        </label>
+      </div>
+
+      <button class="btn btn-full" id="hotelSearchSubmitBtn" type="submit">Search Hotels</button>
+      <p class="form-caption">Stay dates, guest count, and price filters remain aligned with hotel availability and checkout totals.</p>
+    </form>
+  </div>
+</section>
+
+<section class="container metric-strip reveal-group">
+  <article class="metric-tile reveal"><h4>35K+</h4><p>Reservations processed</p></article>
+  <article class="metric-tile reveal"><h4>120+</h4><p>Routes and stay zones</p></article>
+  <article class="metric-tile reveal"><h4>4.7/5</h4><p>Traveler satisfaction</p></article>
+  <article class="metric-tile reveal"><h4>24x7</h4><p>Booking support coverage</p></article>
+</section>
+
+<section class="container section-block reveal-group">
+  <div class="section-head reveal">
+    <div>
+      <p class="eyebrow">Why travelers use ORS</p>
+      <h2>Built around the complete booking journey</h2>
+    </div>
+  </div>
+
+  <div class="feature-strip">
+    <article class="card-glass feature-tile reveal">
+      <h3>Smarter search ranking</h3>
+      <p>Results balance price, rating, class, route, and date proximity instead of showing a flat list.</p>
+    </article>
+    <article class="card-glass feature-tile reveal">
+      <h3>Interactive inventory selection</h3>
+      <p>Travelers choose exact seats or rooms with clear visual states for availability, windows, and reserved inventory.</p>
+    </article>
+    <article class="card-glass feature-tile reveal">
+      <h3>Operationally realistic checkout</h3>
+      <p>Booking is created first, then confirmed after payment so status and capacity stay in sync with the database.</p>
+    </article>
+    <article class="card-glass feature-tile reveal">
+      <h3>Post-booking visibility</h3>
+      <p>Users can return to the dashboard for notifications, tickets, booking history, and cancellations.</p>
+    </article>
+  </div>
+</section>
+
+<section class="container offer-zone reveal-group">
+  <div class="section-head reveal">
+    <div>
+      <p class="eyebrow">Current Offers</p>
+      <h2>Promotions in circulation</h2>
+    </div>
+  </div>
+  <div class="offer-grid">
+    <% offers.forEach(offer => { %>
+      <article class="card-glass offer-card reveal">
+        <div class="offer-top">
+          <h3><%= offer.offer_code %></h3>
+          <span class="pill-badge"><%= offer.discount_percent %>% OFF</span>
+        </div>
+        <p><%= offer.description %></p>
+        <small>Valid till: <%= offer.valid_until %></small>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

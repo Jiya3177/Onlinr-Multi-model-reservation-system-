@@ -1,7 +1,0 @@
-com/ors/testing/user/User.class
-com/ors/testing/pricing/PricingService.class
-com/ors/testing/ReservationTestingApplication.class
-com/ors/testing/user/UserRepository.class
-com/ors/testing/user/UserController.class
-com/ors/testing/user/UserRequest.class
-com/ors/testing/user/UserResponse.class

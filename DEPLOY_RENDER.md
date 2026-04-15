@@ -1,76 +1,94 @@
 # Render Deployment Guide
 
-This project can be deployed from a single GitHub repo to one Render Blueprint that creates:
+This project now uses MongoDB instead of MySQL, so deployment is simpler:
+there is only one web service plus one managed MongoDB connection string.
 
-- `ors-web` for the Node.js + Express app
-- `ors-mysql` for the MySQL database
+## Project structure
 
-## Before You Start
+The app is now organized as:
 
-1. Push the latest code to GitHub.
-2. Keep secrets out of Git.
-3. Rotate any passwords or API keys that were used during local development.
+- `backend/` for server, routes, controllers, data access, models, middleware, and utilities
+- `frontend/` for static assets and EJS views
+- root files for deployment and package management
 
-## One-Time Render Setup
+## 1. Create the database
 
-1. Open [Render](https://render.com/) and sign in.
-2. Click **New +** -> **Blueprint**.
-3. Connect your GitHub account if Render asks.
-4. Select this repository.
-5. Render will detect [`render.yaml`](/Users/chaudharyjiya/Desktop/coding/New%20project/render.yaml).
-6. When prompted, provide the secret values for:
-   - `MYSQL_PASSWORD`
-   - `MYSQL_ROOT_PASSWORD`
-   - `DB_PASSWORD`
-   - `SMTP_USER`
-   - `SMTP_PASS`
-   - `MAIL_FROM`
-   - `APP_BASE_URL`
-   - `FAST2SMS_API_KEY`
+Use MongoDB Atlas, Render Key Value + external Mongo, or any hosted MongoDB
+provider that gives you a standard connection string.
 
-## Important Value Mapping
+Example:
 
-Use the same value for these:
+`mongodb+srv://<user>:<password>@<cluster>/ors_db?retryWrites=true&w=majority`
 
-- `MYSQL_PASSWORD` = `DB_PASSWORD`
+## 2. Create the Render web service
 
-Set `APP_BASE_URL` to your Render public app URL after Render shows it, for example:
+- Runtime: `Node`
+- Build command: `npm install --omit=dev`
+- Start command: `npm run start:backend`
+- Health check path: `/health`
 
-```text
-https://ors-web.onrender.com
+You can also deploy directly with the included [`render.yaml`](/Users/chaudharyjiya/Desktop/untitled%20folder/multi-modal-reservation-system/render.yaml).
+
+## 3. Configure environment variables
+
+Required:
+
+- `MONGODB_URI`
+- `SESSION_SECRET`
+- `APP_BASE_URL`
+
+Recommended runtime config:
+
+- `NODE_ENV=production`
+- `TRUST_PROXY=true`
+- `SESSION_COOKIE_NAME=ors.sid`
+- `SESSION_TTL_HOURS=8`
+- `APP_TIMEZONE=Asia/Kolkata`
+
+Recommended:
+
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `ADMIN_NAME`
+
+Email / SMS integrations:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_SECURE`
+- `MAIL_FROM`
+- `FAST2SMS_API_KEY`
+- `FAST2SMS_ROUTE`
+- `FAST2SMS_LANGUAGE`
+
+## 4. First boot behavior
+
+On startup the app now:
+
+1. connects to MongoDB using `MONGODB_URI`
+2. seeds base cities, offers, demo accounts, and admin defaults when missing
+3. backfills demo transport and hotel inventory when missing
+
+No schema SQL import is required.
+
+## 5. Local smoke test
+
+```bash
+npm install
+npm run start:backend
 ```
 
-## What Happens on Startup
+Backend environment reference:
 
-The app now automatically:
+- `backend/.env.example`
 
-1. connects to MySQL using `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME`
-2. applies the base schema from [`sql/schema.sql`](/Users/chaudharyjiya/Desktop/coding/New%20project/sql/schema.sql)
-3. runs the existing demo inventory bootstrap
-4. starts the web server
+The frontend is server-rendered from EJS and does not require a separate public env file.
 
-This keeps the existing booking, payment, admin, and UI logic unchanged while removing the need to manually import the schema during deployment.
+Then open:
 
-## After the First Deploy
+- `http://localhost:3000`
+- `http://localhost:3000/health`
 
-1. Open the Render web service URL.
-2. Verify:
-   - `/health`
-   - register/login
-   - dashboard
-   - search
-   - booking
-   - payment
-   - forgot password email
-
-## Future Updates
-
-After the first setup, future changes are simple:
-
-1. update code locally
-2. commit and push to GitHub
-3. Render auto-deploys the latest version
-
-## Important Note About Cost
-
-The web service can use Render's free web plan, but the MySQL private service uses a persistent disk and starter plan. This is the simplest single-platform deployment, but it is not a fully free database setup.
+If `/health` returns `{ "ok": true, "database": "connected" }`, the app is ready.

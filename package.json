@@ -2,10 +2,14 @@
   "name": "online-reservation-system-ors",
   "version": "1.0.0",
   "description": "Full-stack Online Reservation System for Flight, Train, Bus, and Hotel booking",
-  "main": "src/server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node backend/server.js",
+    "start:backend": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "dev:backend": "nodemon backend/server.js",
+    "check": "node --check backend/server.js",
+    "check:backend": "node --check backend/server.js"
   },
   "keywords": [
     "ors",
@@ -16,12 +20,15 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.4.1",
     "express-session": "^1.18.0",
+    "helmet": "^8.0.0",
     "method-override": "^3.0.0",
-    "mysql2": "^3.11.3",
+    "mongoose": "^8.15.1",
     "nodemailer": "^8.0.3"
   },
   "devDependencies": {
